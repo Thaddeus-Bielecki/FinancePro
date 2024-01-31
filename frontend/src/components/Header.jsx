@@ -11,7 +11,7 @@ const Header = () => {
                 <Container>
                     <LinkContainer to='/'>
                         <Navbar.Brand>
-                            <img src="../assets/logo.png" alt='Logo' width='50px' height='50px' />
+                            <img src={require('../assets/logo.png')} alt='Logo' width='50px' height='50px' />
                             FinancePro
                         </Navbar.Brand>
                     </LinkContainer>
