@@ -21,7 +21,7 @@ main {
 .product-title {
   height: 2.5em; /* Set a fixed height */
   overflow: hidden; /* Hide overflow content */
-  text-overflow: ellipsis; /* Add ellipsis for long text */
+  text-overflow: ellipsis; /* Add ellipsis for long text */ /* the 3 lil dots helps keep everything the same size */
   white-space: nowrap; /* Prevent wrapping */
 }
 
