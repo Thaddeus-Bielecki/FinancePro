@@ -27,7 +27,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
       <Route path='/IETracking' element={<IncomeExpenseTracking />} />
-      <Route path='/BecomeMember' element={<BecomeMember />} />
+      <Route path='/upgrade' element={<BecomeMember />} />
       <Route path='/Login' element={<LoginScreen />} />
       <Route path='/SignUp' element={<SignUpScreen />} />
       <Route path='/Payment' element={<PaymentScreen />} />
