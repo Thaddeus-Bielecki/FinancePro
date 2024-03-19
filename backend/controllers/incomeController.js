@@ -7,7 +7,7 @@ import Income from '../models/incomeModel.js';
 // @access  Public
 const getIncomes = asyncHandler(async (req, res) => { 
     const incomes = await Income.find({});//pass in options to limit the incomes  it pulls
-    res.send(incomes);
+    res.json(incomes);
 });
 
 // @desc    Fetch a income
