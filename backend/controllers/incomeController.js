@@ -40,14 +40,23 @@ const getIncomesByUserId = asyncHandler(async (req, res) => {
 // @route   POST /api/incomes
 // @access  Private
 const addIncome = asyncHandler(async (req, res) => {
+    const { userId, source, amount, date, category, occursMonthly } = req.body;
     const newIncome = new Income({
-        user: req.user._id,
-        source: req.body.source,
-        amount: req.body.amount,
-        date: req.body.date,
-        category: req.body.category,
-        occursMonthly: req.body.occursMonthly
+        user: userId,
+        source,
+        amount,
+        date,
+        category,
+        occursMonthly
     });
+    // const newIncome = new Income({
+    //     user: req.user._id,
+    //     source: req.body.source,
+    //     amount: req.body.amount,
+    //     date: req.body.date,
+    //     category: req.body.category,
+    //     occursMonthly: req.body.occursMonthly
+    // });
     const addedIncome = await newIncome.save();
     res.json(addedIncome);
 })
