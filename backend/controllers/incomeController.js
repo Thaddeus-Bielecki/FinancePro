@@ -23,4 +23,33 @@ const getIncomeById = asyncHandler(async (req, res) => {
     }
 });
 
-export { getIncomes, getIncomeById };
+// @desc    Fetch all incomes by user id
+// @route   GET /api/incomes/user/:userId
+// @access  Public
+const getIncomesByUserId = asyncHandler(async (req, res) => {
+    const incomes = await Income.find({ user: req.params.userId });
+    if (incomes) {
+        res.json(incomes);
+    } else {
+        res.status(404);
+        throw new Error('Incomes not found');
+    }
+});
+
+// @desc    Add a new incomes
+// @route   POST /api/incomes
+// @access  Private
+const addIncome = asyncHandler(async (req, res) => {
+    const newIncome = new Income({
+        user: req.user._id,
+        source: req.body.source,
+        amount: req.body.amount,
+        date: req.body.date,
+        category: req.body.category,
+        occursMonthly: req.body.occursMonthly
+    });
+    const addedIncome = await newIncome.save();
+    res.json(addedIncome);
+})
+
+export { getIncomes, getIncomeById, getIncomesByUserId, addIncome };
