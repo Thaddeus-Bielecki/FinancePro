@@ -19,7 +19,8 @@ import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LoginScreen from './screens/LoginScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import IncomeExpenseTracking from './screens/IncomeExpenseTracking';
+import IncomeTracking from './screens/IncomeTracking';
+import ExpenseTracking from './screens/ExpenseTracking';
 import BecomeMember from './screens/BecomeMember';
 import FAQScreen from './screens/FAQScreen';
 import AboutUsScreen from './screens/AboutUsScreen';
@@ -41,7 +42,8 @@ const router = createBrowserRouter(
 
       {/* Private Routes - Must be logged in to view */}
       <Route path='' element={<PrivateRoute />} >
-        <Route path='/IETracking' element={<IncomeExpenseTracking />} />
+        <Route path='/incomeTracking' element={<IncomeTracking />} />
+        <Route path='/expenseTracking' element={<ExpenseTracking />} />
         <Route path='/upgrade' element={<BecomeMember />} />
         <Route path='/Profile' element={<ProfileScreen />} />
         

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { Row, Col, ListGroup, Form, Image, Card, Button } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { useGetPayPalClientIdQuery, usePayOrderMutation } from '../slices/ordersApiSlice';
 

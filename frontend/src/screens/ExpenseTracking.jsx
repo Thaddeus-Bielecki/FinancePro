@@ -4,7 +4,7 @@ import React from 'react'
 import { useGetIncomesQuery } from '../slices/incomeApiSlice';
 import Loader from '../components/Loader';
 
-const IncomeExpenseTracking = () => {
+const IncomeTracking = () => {
   const { data: income, isLoading, isError } = useGetIncomesQuery();
 
   /*const [income, setIncome] = useState([]) //need to come back and bring in the income from the backend
@@ -55,4 +55,4 @@ const IncomeExpenseTracking = () => {
   )
 }
 
-export default IncomeExpenseTracking
+export default IncomeTracking
