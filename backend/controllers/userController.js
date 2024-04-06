@@ -154,6 +154,34 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   // res.send('Update user profile');
 });
 
+// @desc    Update user Membership
+// @route   PUT /api/users/updateMember
+// @access  Private
+const updateUserMembership = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isMember = req.body.isMember;
+    user.isAdmin = req.body.isAdmin || user.isAdmin;
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name, 
+      email: updatedUser.email,
+      isMember: updatedUser.isMember,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found.');
+  }
+  // res.send('Update user membership');
+});
+
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
@@ -228,5 +256,6 @@ export {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser
+  updateUser,
+  updateUserMembership
 };
