@@ -232,8 +232,8 @@ console.log('the expense state -->', expense)
         </Col>
 
         {/* Form to allow the user to enter new expenses */}
-        {userInfo.isMember || expense.length < 1 ? (
-          <>
+        {/* {userInfo.isMember || expense.length < 1 ? (
+          <> */}
           <div className='text-center'>
           <h1>Have more bread to track?</h1>
         </div>
@@ -328,10 +328,10 @@ console.log('the expense state -->', expense)
             </Button>
             {loadingAddExpense && <Loader />}
         </Form>
-        </>
-        ) : (
+        {/* </>
+        ) : ( */}
           <h2>Upgrade to a member to add more expenses</h2>
-        )}
+        {/* )} */}
         <Col md="2"></Col>
       </Row>
     </>
