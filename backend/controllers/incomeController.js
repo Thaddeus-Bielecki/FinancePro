@@ -49,16 +49,45 @@ const addIncome = asyncHandler(async (req, res) => {
         category,
         occursMonthly
     });
-    // const newIncome = new Income({
-    //     user: req.user._id,
-    //     source: req.body.source,
-    //     amount: req.body.amount,
-    //     date: req.body.date,
-    //     category: req.body.category,
-    //     occursMonthly: req.body.occursMonthly
-    // });
     const addedIncome = await newIncome.save();
     res.json(addedIncome);
 })
 
-export { getIncomes, getIncomeById, getIncomesByUserId, addIncome };
+// @desc    Delete an incomes
+// @route   DELETE /api/incomes/:id
+// @access  Private
+const deleteIncome = asyncHandler(async (req, res) => {
+    
+    const income = await Income.findById(req.params.id);
+    if (income) {
+        await Income.deleteOne({ _id: req.params.id });
+        res.status(200).json({ message: 'Income removed' });
+    } else {
+        res.status(404);
+        throw new Error('Income not found');
+    }
+})
+
+// @desc    modify an income
+// @route   PATCH /api/incomes
+// @access  Private
+const updateIncome = asyncHandler(async (req, res) => {
+    const { source, amount, date, occursMonthly } = req.body;
+    const { id } = req.params;
+    const income = await Income.findById(id);
+
+    if (income) {
+        income.source = source;
+        income.amount = amount;
+        income.date = date;
+        income.occursMonthly = occursMonthly;
+        const updatedIncome = await income.save();
+        res.json(updatedIncome);
+    } else {
+        res.status(404);
+        throw new Error('Income not found');
+    }
+})
+
+export { getIncomes, getIncomeById, getIncomesByUserId, 
+    addIncome, deleteIncome, updateIncome };

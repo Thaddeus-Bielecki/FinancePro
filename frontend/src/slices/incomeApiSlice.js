@@ -22,7 +22,22 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    deleteIncome: builder.mutation({
+      query: (id) => ({
+        url: `${INCOME_URL}/${id}`,
+        method: 'DELETE',
+      }),
+    }),
+    updateIncome: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `${INCOME_URL}/${id}`,
+        method: 'PATCH',
+        body: patch,
+      }),
+    }),
   }),
 });
 
-export const { useGetIncomesQuery, useGetIncomesByUserIdQuery, useAddIncomeMutation } = incomeApiSlice;
+export const { useGetIncomesQuery, useGetIncomesByUserIdQuery, 
+  useAddIncomeMutation, useDeleteIncomeMutation, 
+  useUpdateIncomeMutation } = incomeApiSlice;
