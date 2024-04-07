@@ -21,6 +21,7 @@ import LoginScreen from './screens/LoginScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import IncomeTracking from './screens/IncomeTracking';
 import ExpenseTracking from './screens/ExpenseTracking';
+import LoanTracking from './screens/LoanTracking';
 import BecomeMember from './screens/BecomeMember';
 import FAQScreen from './screens/FAQScreen';
 import AboutUsScreen from './screens/AboutUsScreen';
@@ -44,6 +45,7 @@ const router = createBrowserRouter(
       <Route path='' element={<PrivateRoute />} >
         <Route path='/incomeTracking' element={<IncomeTracking />} />
         <Route path='/expenseTracking' element={<ExpenseTracking />} />
+        <Route path='/loanTracking' element={<LoanTracking />} />
         <Route path='/upgrade' element={<BecomeMember />} />
         <Route path='/Profile' element={<ProfileScreen />} />
         

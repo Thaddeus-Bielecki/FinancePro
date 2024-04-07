@@ -8,7 +8,7 @@ import { logout } from '../slices/authSlice'
 import { logo } from '../assets/logo.png';
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const LoginHeader = () => {
     const { userInfo } = useSelector((state) => state.auth)
 
     const dispatch = useDispatch();
@@ -40,26 +40,15 @@ const Header = () => {
                         <Nav className='ms-auto'>
 
                             <LinkContainer to='/incomeTracking'>
-                                <Nav.Link to='/incomeTracking'>
-                                    <img src={require('../assets/money-check-dollar-solid.png')} alt='' width='40px' height='40px' />  Track Income
-                                    </Nav.Link>
+                                <Nav.Link to='/incomeTracking'><FaShoppingCart />Track Income</Nav.Link>
                             </LinkContainer>
 
                             <LinkContainer to='/expenseTracking'>
-                                <Nav.Link to='/expenseTracking'><img src={require('../assets/receipt-solid.png')} alt='' width='40px' height='40px' />  Track Expenses
-                                </Nav.Link>
+                                <Nav.Link to='/expenseTracking'><FaShoppingCart />Track Expenses</Nav.Link>
                             </LinkContainer>
-
-                            <LinkContainer to='/loanTracking'>
-                                <Nav.Link to='/loanTracking'><img src={require('../assets/landmark-solid.png')} alt='' width='40px' height='40px' />  Track Loans
-                                </Nav.Link>
-                            </LinkContainer>
-
-                                <LinkContainer to='/upgrade'>
-                                    <Nav.Link to='/upgrade'><FaUser />  Upgrade Today!</Nav.Link>
-                                </LinkContainer>
 
                             { userInfo ? (<>
+                                <FaUser />
                                 <NavDropdown title={userInfo.name} id='username'>
                                     <LinkContainer to='/profile'>
                                         <NavDropdown.Item>Profile</NavDropdown.Item>
@@ -74,7 +63,6 @@ const Header = () => {
                             </LinkContainer>) 
                             }
                             
-                            
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -82,4 +70,4 @@ const Header = () => {
         </header>
     );
     };
-    export default Header;
+    export default LoginHeader;
