@@ -7,6 +7,7 @@ dotenv.config();
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import incomeRouter from './routes/incomeRouter.js';
+import expenseRouter from './routes/expenseRouter.js';
 import userRouter from './routes/userRouter.js';
 
 
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/income', incomeRouter);
+app.use('/api/expense', expenseRouter);
 app.use('/api/users', userRouter);
 app.get('/api/config/paypal', (req, res) => res.send( { clientId: process.env.PAYPAL_CLIENT_ID} ));
 

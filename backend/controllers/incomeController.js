@@ -69,7 +69,7 @@ const deleteIncome = asyncHandler(async (req, res) => {
 })
 
 // @desc    modify an income
-// @route   PATCH /api/incomes
+// @route   PATCH /api/incomes/:id
 // @access  Private
 const updateIncome = asyncHandler(async (req, res) => {
     const { source, amount, date, occursMonthly } = req.body;
