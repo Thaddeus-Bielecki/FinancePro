@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-function BarChart() {
+function ExpenseBarChart() {
   const { userInfo, isLoading: isUserInfoLoading } = useSelector((state) => state.auth);
   const { data: income, isLoading, isError, refetch } = useGetIncomesByUserIdQuery(userInfo._id);
   const { data: expense } = useGetExpenseByUserIdQuery(userInfo._id);
@@ -98,34 +98,57 @@ function BarChart() {
   const data = {
     labels: labels,
     datasets: [
-      {
-        label: 'Income',
-        data: [totalIncome],
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.2)',//green
-          'rgba(54, 162, 235, 0.2)',//blue
+      //{
+      //   label: 'Income',
+      //   data: [totalIncome],
+      //   backgroundColor: [
+      //     'rgba(75, 192, 192, 0.2)',//green
+      //     'rgba(54, 162, 235, 0.2)',//blue
 
-          'rgba(255, 99, 132, 0.2)', //red
+      //     'rgba(255, 99, 132, 0.2)', //red
           
-          'rgba(255, 206, 86, 0.2)',//yellow
+      //     'rgba(255, 206, 86, 0.2)',//yellow
           
-          'rgba(153, 102, 255, 0.2)',
-          // "red", "green","blue","orange","brown"
-        ],
-        borderColor: [
-          'rgb(75, 192, 192)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 99, 132)',
+      //     'rgba(153, 102, 255, 0.2)',
+      //     // "red", "green","blue","orange","brown"
+      //   ],
+      //   borderColor: [
+      //     'rgb(75, 192, 192)',
+      //     'rgb(54, 162, 235)',
+      //     'rgb(255, 99, 132)',
           
-          'rgb(255, 206, 86)',
+      //     'rgb(255, 206, 86)',
           
-          'rgb(153, 102, 255)',
-        ],
-        borderWidth: 1,
-      },
-      {
+      //     'rgb(153, 102, 255)',
+      //   ],
+      //   borderWidth: 1,
+      // },
+      // {
+      //   label: 'Expenses & Loan payments',
+      //   data: [totalExpense + totalLoan],
+      //   backgroundColor: [
+      //     'rgba(255, 99, 132, 0.2)',
+      //     'rgba(255, 206, 86, 0.2)',
+
+      //     'rgba(54, 162, 235, 0.2)',
+          
+      //     'rgba(75, 192, 192, 0.2)',
+      //     'rgba(153, 102, 255, 0.2)',
+      //     // "red", "green","blue","orange","brown"
+      //   ],
+      //   borderColor: [
+      //     'rgb(255, 99, 132)',
+      //     'rgb(255, 206, 86)',
+      //     'rgb(54, 162, 235)',
+          
+      //     'rgb(75, 192, 192)',
+      //     'rgb(153, 102, 255)',
+      //   ],
+      //   borderWidth: 1,
+      // },
+      { ////////////////Can make a graph for expenses and loan payments /////////////////////////
         label: 'Expenses & Loan payments',
-        data: [totalExpense + totalLoan],
+        data: [totalExpense],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(255, 206, 86, 0.2)',
@@ -146,71 +169,29 @@ function BarChart() {
         ],
         borderWidth: 1,
       },
-      // { ////////////////Can make a graph for expenses and loan payments /////////////////////////
-      //   label: 'Expenses & Loan payments',
-      //   data: [, totalExpense],
-      //   backgroundColor: [
-      //     'rgba(255, 99, 132, 0.2)',
-      //     'rgba(255, 206, 86, 0.2)',
+      {
+        label: 'Expenses & Loan payments',
+        data: [totalLoan],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
 
-      //     'rgba(54, 162, 235, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
           
-      //     'rgba(75, 192, 192, 0.2)',
-      //     'rgba(153, 102, 255, 0.2)',
-      //     // "red", "green","blue","orange","brown"
-      //   ],
-      //   borderColor: [
-      //     'rgb(255, 99, 132)',
-      //     'rgb(255, 206, 86)',
-      //     'rgb(54, 162, 235)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          // "red", "green","blue","orange","brown"
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 206, 86)',
+          'rgb(54, 162, 235)',
           
-      //     'rgb(75, 192, 192)',
-      //     'rgb(153, 102, 255)',
-      //   ],
-      //   borderWidth: 1,
-      // },
-      // {
-      //   label: 'Expenses & Loan payments',
-      //   data: [, totalLoan],
-      //   backgroundColor: [
-      //     'rgba(255, 99, 132, 0.2)',
-      //     'rgba(255, 206, 86, 0.2)',
-
-      //     'rgba(54, 162, 235, 0.2)',
-          
-      //     'rgba(75, 192, 192, 0.2)',
-      //     'rgba(153, 102, 255, 0.2)',
-      //     // "red", "green","blue","orange","brown"
-      //   ],
-      //   borderColor: [
-      //     'rgb(255, 99, 132)',
-      //     'rgb(255, 206, 86)',
-      //     'rgb(54, 162, 235)',
-          
-      //     'rgb(75, 192, 192)',
-      //     'rgb(153, 102, 255)',
-      //   ],
-      //   borderWidth: 1,
-      // }
-      // {
-      //   label: 'Expenses',
-      //   data: [28, 48, 40, 19, 86],
-      //   backgroundColor: [
-      //     'rgba(255, 99, 132, 0.2)',
-      //     'rgba(54, 162, 235, 0.2)',
-      //     'rgba(255, 206, 86, 0.2)',
-      //     'rgba(75, 192, 192, 0.2)',
-      //     'rgba(153, 102, 255, 0.2)',
-      //   ],
-      //   borderColor: [
-      //     'rgb(255, 99, 132)',
-      //     'rgb(54, 162, 235)',
-      //     'rgb(255, 206, 86)',
-      //     'rgb(75, 192, 192)',
-      //     'rgb(153, 102, 255)',
-      //   ],
-      //   borderWidth: 1,
-      // },
+          'rgb(75, 192, 192)',
+          'rgb(153, 102, 255)',
+        ],
+        borderWidth: 1,
+      },
     ],
   };
 
@@ -221,4 +202,4 @@ function BarChart() {
   )
 }
 
-export default BarChart;
+export default ExpenseBarChart;
