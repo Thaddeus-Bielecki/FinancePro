@@ -31,6 +31,7 @@ const getLoanByUserId = asyncHandler(async (req, res) => {
     if (loan) {
         res.json(loan);
     } else {
+        console.log('in the backend else block of loan by user id')
         res.status(404);
         throw new Error('Loans not found');
     }

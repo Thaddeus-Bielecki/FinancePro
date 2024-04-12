@@ -232,8 +232,8 @@ console.log('the expense state -->', expense)
         </Col>
 
         {/* Form to allow the user to enter new expenses */}
-        {/* {userInfo.isMember || expense.length < 1 ? (
-          <> */}
+        {userInfo.isMember || expense.length < 1 ? (
+          <>
           <div className='text-center'>
           <h1>Have more bread to track?</h1>
         </div>
@@ -291,7 +291,7 @@ console.log('the expense state -->', expense)
                     <Form.Control 
                       type='text' 
                       value={category}
-                      onChange={(e) => setSource(e.target.value)} 
+                      onChange={(e) => setCategory(e.target.value)} 
                       placeholder='Category' 
                       required 
                       maxLength='50'/>
@@ -299,7 +299,7 @@ console.log('the expense state -->', expense)
                   <Form.Control 
                     as='select' 
                     value={category} 
-                    onChange={(e) => setSource(e.target.value)}>
+                    onChange={(e) => setCategory(e.target.value)}>
                       <option value='Option 1'>Dinning</option>
                       <option value='Option 2'>Education</option>
                       <option value='Option 3'>Entertainment</option>
@@ -328,10 +328,10 @@ console.log('the expense state -->', expense)
             </Button>
             {loadingAddExpense && <Loader />}
         </Form>
-        {/* </>
-        ) : ( */}
+        </>
+        ) : (
           <h2>Upgrade to a member to add more expenses</h2>
-        {/* )} */}
+        )}
         <Col md="2"></Col>
       </Row>
     </>
