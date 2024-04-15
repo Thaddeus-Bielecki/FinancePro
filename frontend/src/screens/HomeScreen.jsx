@@ -4,28 +4,25 @@ import { Row, Col } from 'react-bootstrap'
 import BarChart from '../components/BarChart';
 import ExpenseBarChart from '../components/ExpenseBarChart';
 import PieChart from '../components/PieChart';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
+  const { userInfo, isLoading: isUserInfoLoading } = useSelector((state) => state.auth);
   return (
     <>
-    <h1>Welcome to Your Dashboard *insert username*!</h1>
+    <h1 className='text-center'>Welcome to Your Dashboard {userInfo.name}</h1>
     <Row>
       <Col>
-        <h2>Bar Chart</h2>
-        <BarChart />
-        {/* Could maybe change this one for a line chart of the last 3 months and make an expenses pie chart??? */}
-        <h2>Expenses BarChart</h2> 
-        <ExpenseBarChart />
+        <div className='my-3'>
+          <BarChart />
+        </div>
+        <div className='my-3'>
+          <ExpenseBarChart />
+        </div>
       </Col>
       <Col>
-        <h2>Pie Chart</h2>
         <PieChart />
       </Col>
-      {/* <Col>
-        <h2>Line Chart</h2>
-        <canvas id="myLineChart" width="100" height="100"></canvas>
-      </Col> */}
-      
     </Row>
     </>
   )

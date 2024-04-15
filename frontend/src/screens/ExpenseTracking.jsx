@@ -109,6 +109,7 @@ console.log('the expense state -->', expense)
                 <th>Source</th>
                 <th>Amount</th>
                 <th>Date</th>
+                <th>Category</th>
                 <th>Occurs Monthly</th>
                 <th>Actions</th>
               </tr>
@@ -120,6 +121,7 @@ console.log('the expense state -->', expense)
                   <td>{item.source}</td>
                   <td>$ {item.amount}</td>
                   <td>{new Date(item.date).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})}</td>
+                  <td>{item.category}</td>
                   <td>{item.occursMonthly ? 'Yes' : 'No'}</td>
                   <td>
                     <div className='d-flex justify-content-around'>

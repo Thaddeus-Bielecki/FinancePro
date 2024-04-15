@@ -15,21 +15,13 @@ function BarChart() {
   const { data: expense } = useGetExpenseByUserIdQuery(userInfo._id);
   const { data: loan } = useGetLoanByUserIdQuery(userInfo._id);
   // const { data: loan } = useGetLoanByUserIdQuery(userInfo._id);
-
   const currentDate = new Date();
   const firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 
   const incomeAmounts = Array.isArray(income) ? 
   income
   .filter(item => {
-    if (item.occursMonthly) {
-      const incomeDate = new Date(item.date);
-      const incomeDay = incomeDate.getDate();
-      // If today's date is less than the income day, it means the income has not occurred yet this month
-      return currentDate.getDate() >= incomeDay;
-    } else {
-      return new Date(item.date) >= firstDayOfCurrentMonth;
-    }
+      return new Date(item.date) >= firstDayOfCurrentMonth || item.occursMonthly;
   })
     .map(item => item.amount) 
   : [];
@@ -37,14 +29,7 @@ function BarChart() {
   const expenseAmounts = Array.isArray(expense) ?
   expense
   .filter(item => {
-    if (item.occursMonthly) {
-      const expenseDate = new Date(item.date);
-      const expenseDay = expenseDate.getDate();
-      // If today's date is less than the income day, it means the income has not occurred yet this month
-      return currentDate.getDate() >= expenseDay;
-    } else {
-      return new Date(item.date) >= firstDayOfCurrentMonth;
-    }
+      return new Date(item.date) >= firstDayOfCurrentMonth || item.occursMonthly;
   })
     .map(item => item.amount) 
   : [];
@@ -54,14 +39,9 @@ function BarChart() {
     // .filter(item => new Date(item.startDate) >= firstDayOfCurrentMonth)
     // Not sure if we want Loans to be the same as incomes and expenses
     .filter(item => {
-      if (item.occursMonthly) {
-        const loanDate = new Date(item.startDate);
-        const loanDay = loanDate.getDate();
-        // If today's date is less than the income day, it means the income has not occurred yet this month
-        return currentDate.getDate() >= loanDay;
-      } else {
-        return new Date(item.startDate) >= firstDayOfCurrentMonth;
-      }
+      const loanStartDate = new Date(item.startDate);
+      const loanEndDate = new Date(loanStartDate.setMonth(loanStartDate.getMonth() + item.duration));
+      return loanEndDate >= currentDate;
     })
     .map(item => {
       const r = item.interestRate / 12 / 100; // Convert annual interest rate to monthly and from percentage to decimal
@@ -71,7 +51,6 @@ function BarChart() {
       return monthlyPayment;
     })
   : [];
-  console.log(loanAmounts);
 
   const totalIncome = incomeAmounts.reduce((total, amount) => total + amount, 0);
   const totalExpense = expenseAmounts.reduce((total, amount) => total + amount, 0);
@@ -93,7 +72,7 @@ function BarChart() {
     },
   };
   
-  const labels = ['income vs total expenses'];//, 'expenses vs loan payments'];
+  const labels = ['income vs total expenses'];
   
   const data = {
     labels: labels,
@@ -102,24 +81,10 @@ function BarChart() {
         label: 'Income',
         data: [totalIncome],
         backgroundColor: [
-          'rgba(75, 192, 192, 0.2)',//green
-          'rgba(54, 162, 235, 0.2)',//blue
-
-          'rgba(255, 99, 132, 0.2)', //red
-          
-          'rgba(255, 206, 86, 0.2)',//yellow
-          
-          'rgba(153, 102, 255, 0.2)',
-          // "red", "green","blue","orange","brown"
+          'rgba(75, 192, 192, 0.2)',// Green
         ],
         borderColor: [
-          'rgb(75, 192, 192)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 99, 132)',
-          
-          'rgb(255, 206, 86)',
-          
-          'rgb(153, 102, 255)',
+          'rgb(75, 192, 192, 1)', // Green
         ],
         borderWidth: 1,
       },
@@ -127,90 +92,13 @@ function BarChart() {
         label: 'Expenses & Loan payments',
         data: [totalExpense + totalLoan],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-
-          'rgba(54, 162, 235, 0.2)',
-          
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          // "red", "green","blue","orange","brown"
+          'rgba(255, 99, 132, 0.2)', // Red
         ],
         borderColor: [
-          'rgb(255, 99, 132)',
-          'rgb(255, 206, 86)',
-          'rgb(54, 162, 235)',
-          
-          'rgb(75, 192, 192)',
-          'rgb(153, 102, 255)',
+          'rgb(255, 99, 132, 1)', // Red
         ],
         borderWidth: 1,
       },
-      // { ////////////////Can make a graph for expenses and loan payments /////////////////////////
-      //   label: 'Expenses & Loan payments',
-      //   data: [, totalExpense],
-      //   backgroundColor: [
-      //     'rgba(255, 99, 132, 0.2)',
-      //     'rgba(255, 206, 86, 0.2)',
-
-      //     'rgba(54, 162, 235, 0.2)',
-          
-      //     'rgba(75, 192, 192, 0.2)',
-      //     'rgba(153, 102, 255, 0.2)',
-      //     // "red", "green","blue","orange","brown"
-      //   ],
-      //   borderColor: [
-      //     'rgb(255, 99, 132)',
-      //     'rgb(255, 206, 86)',
-      //     'rgb(54, 162, 235)',
-          
-      //     'rgb(75, 192, 192)',
-      //     'rgb(153, 102, 255)',
-      //   ],
-      //   borderWidth: 1,
-      // },
-      // {
-      //   label: 'Expenses & Loan payments',
-      //   data: [, totalLoan],
-      //   backgroundColor: [
-      //     'rgba(255, 99, 132, 0.2)',
-      //     'rgba(255, 206, 86, 0.2)',
-
-      //     'rgba(54, 162, 235, 0.2)',
-          
-      //     'rgba(75, 192, 192, 0.2)',
-      //     'rgba(153, 102, 255, 0.2)',
-      //     // "red", "green","blue","orange","brown"
-      //   ],
-      //   borderColor: [
-      //     'rgb(255, 99, 132)',
-      //     'rgb(255, 206, 86)',
-      //     'rgb(54, 162, 235)',
-          
-      //     'rgb(75, 192, 192)',
-      //     'rgb(153, 102, 255)',
-      //   ],
-      //   borderWidth: 1,
-      // }
-      // {
-      //   label: 'Expenses',
-      //   data: [28, 48, 40, 19, 86],
-      //   backgroundColor: [
-      //     'rgba(255, 99, 132, 0.2)',
-      //     'rgba(54, 162, 235, 0.2)',
-      //     'rgba(255, 206, 86, 0.2)',
-      //     'rgba(75, 192, 192, 0.2)',
-      //     'rgba(153, 102, 255, 0.2)',
-      //   ],
-      //   borderColor: [
-      //     'rgb(255, 99, 132)',
-      //     'rgb(54, 162, 235)',
-      //     'rgb(255, 206, 86)',
-      //     'rgb(75, 192, 192)',
-      //     'rgb(153, 102, 255)',
-      //   ],
-      //   borderWidth: 1,
-      // },
     ],
   };
 
