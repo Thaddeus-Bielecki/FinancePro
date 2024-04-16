@@ -40,7 +40,7 @@ app.use('/api/expense', expenseRouter);
 app.use('/api/loan', loanRouter);
 app.use('/api/users', userRouter);
 app.get('/api/config/paypal', (req, res) => res.send( { clientId: process.env.PAYPAL_CLIENT_ID} ));
-
+/*
 cron.schedule('* * * * *', function() {
     console.log('Running a job at 05:00 at the beginning of the month');
     sendMonthlyEmails();
@@ -127,7 +127,7 @@ async function sendMonthlyEmails() {
     // });
     });
     }
-}
+}*/
 
 app.use(notFound);
 app.use(errorHandler);

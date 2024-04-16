@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { ListGroup } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { useGetPayPalClientIdQuery, usePayOrderMutation } from '../slices/ordersApiSlice';
+import { Row, Col } from 'react-bootstrap';
+import { setCredentials } from '../slices/authSlice';
 
 const BecomeMember = () => {
   const [plan, setPlan] = useState('regular'); // Default to 'student' plan
   const planCosts = { student: 10, regular: 20 }; // Replace with actual costs
+  const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
   const isStudent = userInfo.email.endsWith('.edu');
@@ -53,6 +56,8 @@ const BecomeMember = () => {
 
         const updatedUser = { ...userInfo, isMember: true };
         await payOrder(updatedUser);
+        localStorage.setItem('userInfo', JSON.stringify(updatedUser));
+        dispatch(setCredentials(updatedUser));
         toast.success("Order has been paid");
       } catch (err) {
         toast.error(err.message);
@@ -81,26 +86,45 @@ const BecomeMember = () => {
     <>
     {userInfo.isMember ? 
     <>
-      <h1>Thank you for becoming a member!</h1>
+    <div className='my-5'>
+      <div className='text-center'>
+        <h1>Thank you for becoming a member!</h1>
+      </div>
+      </div>
     </>
     :(
     <>
-      <h1>Become a member of FinancePro today and take control of your finances!</h1>
-      <select value={plan} onChange={handlePlanChange}>
-        {isStudent && <option value="student">Student Plan</option>}
-        <option value="regular">Regular Plan</option>
-      </select>
-      
-      <ListGroup.Item>
-        <div>
-          <PayPalButtons 
-            key={plan}
-            createOrder={createOrder}
-            onApprove={onApprove}
-            onError={onError}
-            ></PayPalButtons>
+    <div className='my-3'>
+    <div className='text-center'>
+      <h1>Become a member and take control of your finances today!</h1>
+    </div>
+    </div>
+    <Row>
+      <Col md='3'></Col>
+      <Col md='6'>
+        <div className='my-5'>
+          <div className='text-center'>
+          <h3>Choose a Plan</h3>
+          <select value={plan} onChange={handlePlanChange}>
+            {isStudent && <option value="student">Student Plan</option>}
+            <option value="regular">Standard Plan</option>
+          </select>
+          </div>
         </div>
-      </ListGroup.Item>
+        
+        <ListGroup.Item>
+          <div>
+            <PayPalButtons 
+              key={plan}
+              createOrder={createOrder}
+              onApprove={onApprove}
+              onError={onError}
+              ></PayPalButtons>
+          </div>
+        </ListGroup.Item>
+      </Col>
+      <Col md='3'></Col>
+      </Row>
     </>)}
     </>
   );
