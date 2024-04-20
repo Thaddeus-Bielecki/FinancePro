@@ -18,6 +18,8 @@ import reportWebVitals from './reportWebVitals';
 import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LoginScreen from './screens/LoginScreen';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import IncomeTracking from './screens/IncomeTracking';
 import ExpenseTracking from './screens/ExpenseTracking';
@@ -35,6 +37,8 @@ const router = createBrowserRouter(
       {/* <Route path='/upgrade' element={<BecomeMember />} /> */}
       <Route path='/Login' element={<LoginScreen />} />
       <Route path='/Register' element={<RegisterScreen />} />
+      <Route path='/ForgotPassword' element={<ForgotPasswordScreen />} />
+      <Route path='/ResetPassword' element={<ResetPasswordScreen />} />
       {/* <Route path='/Payment' element={<PaymentScreen />} /> */}
       {/* <Route path='/Profile' element={<ProfileScreen />} /> */}
       

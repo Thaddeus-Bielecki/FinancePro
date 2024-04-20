@@ -1,6 +1,13 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js"
 import generateToken from "../utils/generateToken.js";
+import nodemailer from 'nodemailer';
+import bcrypt from 'bcryptjs';
+
+// import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import { timeStamp } from "console";
+import exp from "constants";
 
 ///////////// All Commented out sections were stolen from TDShop to be modded later ///////////////
 //////////// The returning statements is just proof of concept /////////////////////////////////
@@ -161,6 +168,73 @@ const updateUserMembership = asyncHandler(async (req, res) => {
   // res.send('Update user membership');
 });
 
+// @desc    send forgot password email
+// @route   POST /api/users/forgot-password
+// @access  public
+const forgotPassword = asyncHandler(async (req, res) => {
+  const {email} = req.body;
+  
+  ////////////This line is for generating a token for the email to reset password////////////////
+  /////////// Look at this and copilot suggestion
+  //const token = jwt.sign({ id: user._id, timeStamp: new Date().getTime() }, process.env.JWT_SECRET, {expiresIn: '10m'});
+  const token = jwt.sign({ id: email, timestamp: new Date().getTime() }, process.env.JWT_SECRET, {expiresIn: '10m'})
+
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+//////////////////////// Need to fix //////////////////////////
+  const mailConfig = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Forgot Password',
+    text: `Hi, please follow this link to reset your password: http://localhost:3000/ResetPassword?token=${token}`,
+  };
+
+  transporter.sendMail(mailConfig, function(err, info) {
+    if (err) {
+      console.log(err);
+      res.status(500).json({message: 'Error sending email'});
+    } else {
+      console.log(info);
+      res.status(200).json({message: 'Email sent'});
+    }
+  });
+});
+
+// @desc    Reset password
+// @route   PUT /api/users/reset-password
+// @access  public
+const resetPassword = asyncHandler(async (req, res) => {
+  console.log("in the reset password route - userController.js");
+  const { password, token } = req.body;
+
+  console.log(`Token received: ${token}`);
+
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      res.status(401).json({message: 'Invalid or expired token'});
+    } else {
+      const { email } = decoded;
+
+      const user = await User.findOne({ email });
+
+      if(user) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+        await user.save();
+        res.status(200).json({message: 'Password reset successful'});
+      } else {
+        res.status(404).json({message: 'User not found'});
+      }
+    }
+  });
+});
+
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
@@ -236,5 +310,7 @@ export {
   deleteUser,
   getUserById,
   updateUser,
-  updateUserMembership
+  updateUserMembership,
+  forgotPassword,
+  resetPassword
 };

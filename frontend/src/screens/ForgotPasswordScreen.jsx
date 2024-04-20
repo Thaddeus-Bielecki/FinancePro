@@ -9,12 +9,14 @@ import { useLoginMutation } from '../slices/usersApiSlice'
 import { setCredentials } from '../slices/authSlice'
 import { toast } from 'react-toastify'
 // import axios from 'axios'
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
+// import ForgotPassword from '../screens/ForgotPasswordScreen'
+import { useForgotPasswordMutation } from '../slices/usersApiSlice'
 
-const LoginScreen = () => {
+const ForgotPasswordScreen = () => {
   // const [user, setUser] = useState(null) //
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+
+  const [forgotPassword, {isLoading: forgotPasswordLoading} ]= useForgotPasswordMutation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,8 +39,10 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try{
-      const res = await login({ email, password}).unwrap();
-      dispatch(setCredentials({...res, }));
+      await forgotPassword({ email }).unwrap();
+      // const res = await login({ email, password}).unwrap();
+      // dispatch(setCredentials({...res, }));
+      alert('Email sent to reset password')
       navigate(redirect);
     } catch(err){
       toast.error(err?.data?.message || err.error)
@@ -48,7 +52,7 @@ const LoginScreen = () => {
   return (
 
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Forgot Password</h1>
 
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='email' className='my-3'>
@@ -61,18 +65,8 @@ const LoginScreen = () => {
           </Form.Control>
         </Form.Group>
 
-        <Form.Group controlId='password' className='my-3'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type='password'
-            placeholder='Enter Password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}>
-          </Form.Control>
-        </Form.Group>
-
         <Button type='submit' variant='primary' className='mt-2' disabled={ isLoading }>
-          Sign In
+          Send Email
         </Button>
 
         { isLoading && <Loader /> }
@@ -80,16 +74,11 @@ const LoginScreen = () => {
 
       <Row className='py-3'>
         <Col>
-          New User? <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>Register</Link>
+          Remember Your Password? <Link to={redirect ? `/register?redirect=${redirect}` : '/login'}>Login</Link>
         </Col>
       </Row>
-      {/* <Row>
-        <Col>
-          <Link to='/forgotpassword'>Forgot Password?</Link>
-        </Col>
-      </Row> */}
     </FormContainer>
   )
 }
 
-export default LoginScreen
+export default ForgotPasswordScreen

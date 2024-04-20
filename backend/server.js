@@ -1,7 +1,9 @@
 // since we are using type module, we can use import instead of require
-import express from 'express';
+import express, { response } from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import mongoSanitize from 'express-mongo-sanitize';
+import {xss} from 'express-xss-sanitizer';
 dotenv.config();
 
 import connectDB from './config/db.js';
@@ -31,6 +33,148 @@ app.use(express.urlencoded({ extended: true }));
 // Parse cookies middleware
 app.use(cookieParser());
 
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize({ replaceWith: '_' }));
+
+// Data sanitization against XSS
+app.use(xss());
+
+//'0 5 1 * *' - run at 5:00 on the first day of the month
+//'* * * * *' - run every minute -- for testing
+cron.schedule('0 5 1 * *', function() {
+    console.log('Running a job at 05:00 at the beginning of the month');
+    // sendEmail();
+    sendMonthlyEmails();
+});
+
+async function sendMonthlyEmails() {
+    try {
+        const users = await User.find({ isMember: true });
+        const currentDate = new Date();
+        const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+        const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+
+        for (let user of users) {
+            // Fetch the incomes, expenses, and loans for the user
+            const incomes = await Income.find({ userId: user._id });
+            const expenses = await Expense.find({ userId: user._id });
+            const loans = await Loan.find({ userId: user._id });
+
+            // Filter the incomes and expenses that have dates within the prior month
+            const priorMonthIncomes = incomes.filter(income => income.date >= startOfMonth && income.date <= endOfMonth);
+            const priorMonthExpenses = expenses.filter(expense => expense.date >= startOfMonth && expense.date <= endOfMonth);
+
+            // Filter the loans that are still active
+            const activeLoans = loans.filter(loan => {
+                const loanEndDate = new Date(loan.startDate.getFullYear(), loan.startDate.getMonth() + loan.duration);
+                return loanEndDate > currentDate;
+            });
+
+            // Calculate the total income, expenses, and loan payments
+            const totalIncome = priorMonthIncomes.reduce((total, income) => total + income.amount, 0);
+            const totalExpenses = priorMonthExpenses.reduce((total, expense) => total + expense.amount, 0);
+            const totalLoanPayments = activeLoans.reduce((total, item) => {
+                const r = item.interestRate / 12 / 100; // Convert annual interest rate to monthly and from percentage to decimal
+                const PV = item.amount;
+                const n = item.duration;
+                const monthlyPayment = (r * PV) / (1 - Math.pow(1 + r, -n));
+                return monthlyPayment + total;
+            }, 0);
+            try{
+                sendMail(user.name, user.email, totalIncome, totalExpenses, totalLoanPayments);
+            } catch (error) {
+                console.error(`Failed to send email to ${user.email}: ${error.message}`);
+            }
+        }
+    } catch (error) {
+        console.error(`Failed to send monthly emails: ${error.message}`);
+    }
+}
+
+function sendMail(name, email, totalIncome, totalExpenses, totalLoanPayments) {
+    return new Promise((resolve, reject) => {
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        })
+
+        const mailConfig = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Monthly Recap',
+            text: `Hi ${name}, here's your monthly recap...
+
+            Your current monthly income is $${totalIncome}.
+            Your current monthly expenses are $${totalExpenses}.
+            Your current monthly loan payments are $${totalLoanPayments}.
+            ----------------------------------------------------------------
+            Your Overall Cash Flow is $${totalIncome - totalExpenses - totalLoanPayments}.
+            
+            Please login to your account to view more details.
+            Have a great day!`
+        }
+
+        transporter.sendMail(mailConfig, (error, info) => {
+            if (error) {
+                console.log(error);
+                reject(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+                resolve(info);
+            }
+        }
+        )
+    })
+}
+
+// need this function to take in variables of the users info from a function that will gather them all from the DB
+// then send the email to each user -- will need name, incomes, expenses, loans, total income, total expenses, total loan payments
+// function sendEmail() {
+//     return new Promise((resolve, reject) => {
+//         var transporter = nodemailer.createTransport({
+//             service: 'gmail',
+//             auth: {
+//                 user: process.env.EMAIL_USER,
+//                 pass: process.env.EMAIL_PASS,
+//             },
+//         })
+
+//         const mailConfig = {
+//             from: process.env.EMAIL_USER,
+//             to: '22bielecki@gmail.com',
+//             subject: 'Test email',
+//             text: 'This is a test email text',
+//             html: '<h1>This is a test email</h1>'
+//         }
+
+//         transporter.sendMail(mailConfig, (error, info) => {
+//             if (error) {
+//                 console.log(error);
+//                 reject(error);
+//             } else {
+//                 console.log('Email sent: ' + info.response);
+//                 resolve(info);
+//             }
+//         }
+//         )
+//     })
+// }
+
+// app.get('/send-email', async (req, res) => {
+//     sendEmail()
+//         .then(response => res.send(response))
+//         .catch(error => res.status(500).send(error));
+//     // try {
+//     //     const info = await sendEmail();
+//     //     res.send(info);
+//     // } catch (error) {
+//     //     res.status(500)
+//     // }
+// })
+
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
@@ -40,94 +184,6 @@ app.use('/api/expense', expenseRouter);
 app.use('/api/loan', loanRouter);
 app.use('/api/users', userRouter);
 app.get('/api/config/paypal', (req, res) => res.send( { clientId: process.env.PAYPAL_CLIENT_ID} ));
-/*
-cron.schedule('* * * * *', function() {
-    console.log('Running a job at 05:00 at the beginning of the month');
-    sendMonthlyEmails();
-});
-
-async function sendMonthlyEmails() {
-    const users = await User.find({ isMember: true});
-    const email = 'financepro.team@gmail.com';
-    const password = '123456Twb';
-
-    const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-            user: email,
-            pass: password,
-        },
-    });
-
-    // const transporter = nodemailer.createTransport({
-    // service: 'gmail',
-    // auth: {
-    //     user: 'financepro.team@gmail.com',
-    //     pass: '@63025Twb'
-    // }
-    // });
-
-    const currentDate = new Date();
-    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
-
-    for (let user of users) {
-        // Fetch the incomes, expenses, and loans for the user
-        const incomes = await Income.find({ userId: user._id });
-        const expenses = await Expense.find({ userId: user._id });
-        const loans = await Loan.find({ userId: user._id });
-
-        // Filter the incomes and expenses that have dates within the prior month
-        const priorMonthIncomes = incomes.filter(income => income.date >= startOfMonth && income.date <= endOfMonth);
-        const priorMonthExpenses = expenses.filter(expense => expense.date >= startOfMonth && expense.date <= endOfMonth);
-
-        // Filter the loans that are still active
-        const activeLoans = loans.filter(loan => {
-        const loanEndDate = new Date(loan.startDate.getFullYear(), loan.startDate.getMonth() + loan.duration);
-        return loanEndDate > currentDate;
-        });
-    
-        // Calculate the total income, expenses, and loan payments
-        const totalIncome = priorMonthIncomes.reduce((total, income) => total + income.amount, 0);
-        const totalExpenses = priorMonthExpenses.reduce((total, expense) => total + expense.amount, 0);
-        const totalLoanPayments = activeLoans.reduce((total, item) => {
-            const r = item.interestRate / 12 / 100; // Convert annual interest rate to monthly and from percentage to decimal
-            const PV = item.amount;
-            const n = item.duration;
-            const monthlyPayment = (r * PV) / (1 - Math.pow(1 + r, -n));
-            return monthlyPayment + total;
-            }, 0);
-
-    users.forEach(async (user) => {
-    const mailOptions = {
-        from: 'financepro.team@gmail.com',
-        to: user.email,
-        subject: 'Monthly update',
-        text: `Hello ${user.name}, here's your monthly update...
-        Your current monthly income is $${totalIncome}.
-        Your current monthly expenses are $${totalExpenses}.
-        Your current monthly loan payments are $${totalLoanPayments}.
-        
-        Please login to your account to view more details.
-        Have a great day!`
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-
-    console.log('Email sent: ' + info.response);
-
-    // transporter.sendMail(mailOptions, function(error, info) {
-    //     if (error) {
-    //     console.log(error);
-    //     } else {
-    //     console.log('Email sent: ' + info.response);
-    //     }
-    // });
-    });
-    }
-}*/
 
 app.use(notFound);
 app.use(errorHandler);

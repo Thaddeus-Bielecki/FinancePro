@@ -16,7 +16,7 @@ export const apiSlice = createApi({
       query: () => '/api/expense',
     }),
     getUsers: builder.query({
-      query: () => '/api/users', //might need to get rid of
+      query: () => '/api/users',
     }),
     getPaypal: builder.query({
       query: () => '/api/config/paypal',
