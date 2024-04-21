@@ -55,12 +55,25 @@ const Header = () => {
                                 </Nav.Link>
                             </LinkContainer>
 
-                                <LinkContainer to='/upgrade'>
-                                    <Nav.Link to='/upgrade'><FaUser />  Upgrade Today!</Nav.Link>
-                                </LinkContainer>
+                                {/* <LinkContainer to='/upgrade'>
+                                    <Nav.Link to='/upgrade'> 
+                                        {userInfo && !userInfo.isMember && <FaUser />}
+                                        {userInfo && userInfo.isMember ? 'Thanks for being a member!' : 'Upgrade Today!'}
+                                    </Nav.Link>
+                                </LinkContainer> */}
+
+                            {userInfo && userInfo.isMember ? (
+                            <></>
+                            ) : (
+                            <LinkContainer to='/upgrade'style={{ display: 'flex', alignItems: 'center' }}>
+                                <Nav.Link to='/upgrade'> 
+                                <FaUser style={{marginRight: '5px'}} /> Upgrade Today!
+                                </Nav.Link>
+                            </LinkContainer>
+                            )}
 
                             { userInfo ? (<>
-                                <NavDropdown title={userInfo.name} id='username'>
+                                <NavDropdown title={userInfo.name} id='username' style={{ display: 'flex', alignItems: 'center' }}>
                                     <LinkContainer to='/profile'>
                                         <NavDropdown.Item>Profile</NavDropdown.Item>
                                     </LinkContainer>
@@ -69,8 +82,8 @@ const Header = () => {
                                     </NavDropdown.Item>
                                 </NavDropdown></>
                             ) : (
-                                <LinkContainer to='/login'>
-                                <Nav.Link to='/login'><FaUser /> Sign In</Nav.Link>
+                                <LinkContainer to='/login' style={{ display: 'flex', alignItems: 'center' }}>
+                                <Nav.Link to='/login'><FaUser style={{marginRight: '5px'}}/> Sign In</Nav.Link>
                             </LinkContainer>) 
                             }
                             

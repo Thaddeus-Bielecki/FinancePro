@@ -130,51 +130,6 @@ function sendMail(name, email, totalIncome, totalExpenses, totalLoanPayments) {
     })
 }
 
-// need this function to take in variables of the users info from a function that will gather them all from the DB
-// then send the email to each user -- will need name, incomes, expenses, loans, total income, total expenses, total loan payments
-// function sendEmail() {
-//     return new Promise((resolve, reject) => {
-//         var transporter = nodemailer.createTransport({
-//             service: 'gmail',
-//             auth: {
-//                 user: process.env.EMAIL_USER,
-//                 pass: process.env.EMAIL_PASS,
-//             },
-//         })
-
-//         const mailConfig = {
-//             from: process.env.EMAIL_USER,
-//             to: '22bielecki@gmail.com',
-//             subject: 'Test email',
-//             text: 'This is a test email text',
-//             html: '<h1>This is a test email</h1>'
-//         }
-
-//         transporter.sendMail(mailConfig, (error, info) => {
-//             if (error) {
-//                 console.log(error);
-//                 reject(error);
-//             } else {
-//                 console.log('Email sent: ' + info.response);
-//                 resolve(info);
-//             }
-//         }
-//         )
-//     })
-// }
-
-// app.get('/send-email', async (req, res) => {
-//     sendEmail()
-//         .then(response => res.send(response))
-//         .catch(error => res.status(500).send(error));
-//     // try {
-//     //     const info = await sendEmail();
-//     //     res.send(info);
-//     // } catch (error) {
-//     //     res.status(500)
-//     // }
-// })
-
 app.get('/', (req, res) => {
     res.send('API is running...');
 });

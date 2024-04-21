@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useGetLoanByUserIdQuery, useAddLoanMutation,
   useDeleteLoanMutation, useUpdateLoanMutation } from '../slices/loanApiSlice';
@@ -92,6 +92,13 @@ const LoanTracking = () => {
     }
   }
 
+  useEffect(() => {
+    console.log('IncomeTracking component rendered');
+    if(!userInfo.isMember){
+      toast.success('💡 Pro Tip: Upgrade your account today to customize your loan categories');
+    }
+  }, []);
+
   return (
     <>
     {isLoading ? <Loader /> 
@@ -99,8 +106,8 @@ const LoanTracking = () => {
     : (
     <>
       <div className='text-center'>
-        <h1>Ready to track your Loans?</h1>
-        <h3>Here are your Loans:</h3>
+        <h1>Track your loans like a Pro!</h1>
+        <h4>Your recorded loans:</h4>
       </div>
       <Row>
         <Col md="1"></Col>
@@ -256,7 +263,7 @@ const LoanTracking = () => {
         {userInfo.isMember || loan.length < 3 ? (
           <>
           <div className='text-center'>
-          <h1>Have more bread to track?</h1>
+          <h1>New Loan? 🏦</h1>
         </div>
         <Form onSubmit={handleSubmit}>
         <Form.Group controlId='lender' className='my-2'>
@@ -275,7 +282,7 @@ const LoanTracking = () => {
                   <Form.Label>Amount</Form.Label>
                   <Form.Control 
                     type='number'
-                    placeholder='Enter $ Amount'
+                    placeholder='Enter Total $ Amount'
                     value={amount}
                     onChange={(e) => setAmount(Math.round(Number(e.target.value) * 100) / 100)} 
                     required 

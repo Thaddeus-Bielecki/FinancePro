@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react' // not sure if I need this - he used it for products
+import { useEffect } from 'react'
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import BarChart from '../components/BarChart';
@@ -26,7 +26,7 @@ const HomeScreen = () => {
   if(isUserInfoLoading || !userInfo) return (<Loader />);
   return (
     <>
-    <h1 className='text-center'>Welcome to Your Dashboard {userInfo.name}</h1>
+    <h1 className='text-center'>Welcome To Your Personal Dashboard, {userInfo.name}!</h1>
     <Row>
       <Col>
         <div className='my-3'>

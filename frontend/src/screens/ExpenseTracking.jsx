@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useGetExpenseByUserIdQuery, useAddExpenseMutation,
   useDeleteExpenseMutation, useUpdateExpenseMutation } from '../slices/expenseApiSlice';
@@ -88,6 +88,13 @@ const ExpenseTracking = () => {
   console.log(userInfo)
 console.log('the expense state -->', expense)
 
+useEffect(() => {
+  console.log('IncomeTracking component rendered');
+  if(!userInfo.isMember){
+    toast.success('💡 Pro Tip: Upgrade your account today to customize your loan categories');
+  }
+}, []);
+
   return (
     <>
     {isLoading ? <Loader /> 
@@ -95,8 +102,8 @@ console.log('the expense state -->', expense)
     : (
     <>
       <div className='text-center'>
-        <h1>Ready to track your Expenses?</h1>
-        <h3>Here are your expenses:</h3>
+        <h1>Track your expenses like a Pro!</h1>
+        <h4>Your recorded expenses:</h4>
       </div>
       <Row>
         <Col md="2"></Col>
@@ -237,7 +244,7 @@ console.log('the expense state -->', expense)
         {userInfo.isMember || expense.length < 1 ? (
           <>
           <div className='text-center'>
-          <h1>Have more bread to track?</h1>
+          <h1>Bills keep coming? 🧾</h1>
         </div>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId='source' className='my-2'>

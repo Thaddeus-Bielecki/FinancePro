@@ -53,7 +53,9 @@ const registerUser = asyncHandler(async (req, res) => {
   const user = await User.create({
     name,
     email,
-    password
+    password,
+    isMember: false,
+    isAdmin: false,
   });
 
   if (user) {
@@ -174,9 +176,6 @@ const updateUserMembership = asyncHandler(async (req, res) => {
 const forgotPassword = asyncHandler(async (req, res) => {
   const {email} = req.body;
   
-  ////////////This line is for generating a token for the email to reset password////////////////
-  /////////// Look at this and copilot suggestion
-  //const token = jwt.sign({ id: user._id, timeStamp: new Date().getTime() }, process.env.JWT_SECRET, {expiresIn: '10m'});
   const token = jwt.sign({ id: email, timestamp: new Date().getTime() }, process.env.JWT_SECRET, {expiresIn: '10m'})
 
 
@@ -187,7 +186,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
       pass: process.env.EMAIL_PASS,
     },
   });
-//////////////////////// Need to fix //////////////////////////
+
   const mailConfig = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -210,6 +209,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/reset-password
 // @access  public
 const resetPassword = asyncHandler(async (req, res) => {
+  //////Currently having issues with getting the token to the backend ///////
   console.log("in the reset password route - userController.js");
   const { password, token } = req.body;
 
@@ -234,6 +234,9 @@ const resetPassword = asyncHandler(async (req, res) => {
     }
   });
 });
+
+/////////////// admin routes /////////////////
+////////////// To be developed at a later release /////////////////
 
 // @desc    Get all users
 // @route   GET /api/users

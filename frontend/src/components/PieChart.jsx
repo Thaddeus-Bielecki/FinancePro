@@ -71,7 +71,7 @@ const expenseAmounts = Object.values(expenseData);
       },
       title: {
         display: true,
-        text: 'Expenses by Category',
+        text: 'Monthly Expenses by Category',
       },
     },
   }

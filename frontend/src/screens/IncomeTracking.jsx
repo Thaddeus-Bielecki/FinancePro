@@ -7,6 +7,7 @@ import { Table, Col, Row, Button, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { addIncome } from '../slices/incomeApiSlice';
 import { toast } from 'react-toastify'
+import { set } from 'mongoose';
 
 const IncomeTracking = () => {
   // const { data: income, isLoading, isError } = useGetIncomesQuery();
@@ -21,7 +22,7 @@ const IncomeTracking = () => {
   const [updateId, setUpdateId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   
-  const [source, setSource] = useState('');
+  const [source, setSource] = useState('Job');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
   const [category, setCategory] = useState('income');
@@ -32,6 +33,7 @@ const IncomeTracking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(userInfo._id)
+    console.log(source)
     // console.log(userInfo)
     if (!userInfo) {
       toast.error('User information is not available');
@@ -91,7 +93,14 @@ const IncomeTracking = () => {
       console.error(err);
     }
   }
-  // console.log(income)
+
+  useEffect(() => {
+    console.log('IncomeTracking component rendered');
+    if(!userInfo.isMember){
+      toast.success('💡 Pro Tip: Upgrade your account today to add more streams of income');
+    }
+  }, []);
+
   return (
     <>
     {isLoading ? <Loader /> 
@@ -99,8 +108,8 @@ const IncomeTracking = () => {
     : (
     <>
       <div className='text-center'>
-        <h1>Ready to track your Income?</h1>
-        <h3>Here is your income:</h3>
+        <h1>Track your income like a Pro!</h1>
+        <h4>Your recorded income:</h4>
       </div>
       <Row>
         <Col md="2"></Col>
@@ -210,7 +219,7 @@ const IncomeTracking = () => {
         {userInfo.isMember || income.length < 1 ? (
           <>
           <div className='text-center'>
-          <h1>Have more bread to track?</h1>
+          <h1>Track more 🍞 below</h1>
         </div>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId='source' className='my-2'>
