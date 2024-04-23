@@ -19,10 +19,10 @@ const ExpenseTracking = () => {
   const [updateId, setUpdateId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   
-  const [source, setSource] = useState('');
+  const [source, setSource] = useState('College');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('Dinning');
   const [occursMonthly, setOccursMonthly] = useState(true);
 
 

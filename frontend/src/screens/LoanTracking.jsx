@@ -24,7 +24,7 @@ const LoanTracking = () => {
   const [startDate, setStartDate] = useState('');
   const [duration, setDuration] = useState('');
   const [interestRate, setInterestRate] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('Car');
   const [description, setDescription] = useState('');
 
 
