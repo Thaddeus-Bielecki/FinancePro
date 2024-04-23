@@ -105,6 +105,8 @@ const BecomeMember = () => {
         <div className='my-5'>
           <div className='text-center'>
           <h3>Choose a Plan</h3>
+          {isStudent && <p>Student Plan: $4.99</p>}
+          <p>Standard Plan: $12.99</p>
           <select value={plan} onChange={handlePlanChange}>
             {isStudent && <option value="student">Student Plan</option>}
             <option value="regular">Standard Plan</option>
