@@ -25,25 +25,16 @@ import IncomeTracking from './screens/IncomeTracking';
 import ExpenseTracking from './screens/ExpenseTracking';
 import LoanTracking from './screens/LoanTracking';
 import BecomeMember from './screens/BecomeMember';
-import FAQScreen from './screens/FAQScreen';
-import AboutUsScreen from './screens/AboutUsScreen';
 import PrivateRoute from './components/PrivateRoute';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
-      {/* <Route path='/IETracking' element={<IncomeExpenseTracking />} /> */}
-      {/* <Route path='/upgrade' element={<BecomeMember />} /> */}
       <Route path='/Login' element={<LoginScreen />} />
       <Route path='/Register' element={<RegisterScreen />} />
       <Route path='/ForgotPassword' element={<ForgotPasswordScreen />} />
       <Route path='/ResetPassword' element={<ResetPasswordScreen />} />
-      {/* <Route path='/Payment' element={<PaymentScreen />} /> */}
-      {/* <Route path='/Profile' element={<ProfileScreen />} /> */}
-      
-      <Route path='/FAQ' element={<FAQScreen />} />
-      <Route path='/AboutUs' element={<AboutUsScreen />} />
 
       {/* Private Routes - Must be logged in to view */}
       <Route path='' element={<PrivateRoute />} >
@@ -53,9 +44,6 @@ const router = createBrowserRouter(
         <Route path='/upgrade' element={<BecomeMember />} />
         <Route path='/Profile' element={<ProfileScreen />} />
         
-        {/* <Route path='' element={<newMemberRoute />} >
-          Add new member only page here (the upgrade one)
-        </Route> */}
       </Route>
 
       {/* <Route path='' element={<AdminRoute />} >

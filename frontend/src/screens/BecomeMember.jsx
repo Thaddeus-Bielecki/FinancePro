@@ -10,7 +10,7 @@ import { setCredentials } from '../slices/authSlice';
 
 const BecomeMember = () => {
   const [plan, setPlan] = useState('regular'); // Default to 'student' plan
-  const planCosts = { student: 10, regular: 20 }; // Replace with actual costs
+  const planCosts = { student: 4.99, regular: 11.99 }; // Replace with actual costs
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
