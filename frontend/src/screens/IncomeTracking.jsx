@@ -95,7 +95,6 @@ const IncomeTracking = () => {
   }
 
   useEffect(() => {
-    console.log('IncomeTracking component rendered');
     if(!userInfo.isMember){
       toast.success('💡 Pro Tip: Upgrade your account today to add more streams of income');
     }

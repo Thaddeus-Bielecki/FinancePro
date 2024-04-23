@@ -36,8 +36,6 @@ const expenseAmounts = Object.values(expenseData);
 
   const loanAmounts = Array.isArray(loan) ?
   loan
-    // .filter(item => new Date(item.startDate) >= firstDayOfCurrentMonth)
-    // Not sure if we want Loans to be the same as incomes and expenses
     .filter(item => {
       const loanStartDate = new Date(item.startDate);
       const loanEndDate = new Date(loanStartDate.setMonth(loanStartDate.getMonth() + item.duration));
