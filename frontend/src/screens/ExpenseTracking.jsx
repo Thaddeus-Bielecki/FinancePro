@@ -91,7 +91,7 @@ console.log('the expense state -->', expense)
 useEffect(() => {
   console.log('IncomeTracking component rendered');
   if(!userInfo.isMember){
-    toast.success('💡 Pro Tip: Upgrade your account today to customize your loan categories');
+    toast.success('💡 Pro Tip: Upgrade your account today to customize your expense categories');
   }
 }, []);
 
@@ -163,10 +163,10 @@ useEffect(() => {
                     as='select' 
                     value={source} 
                     onChange={(e) => setSource(e.target.value)}>
-                      <option value='Option 1'>College</option>
-                      <option value='Option 2'>Gas Station</option>
-                      <option value='Option 3'>Grocery Store</option>
-                      <option value='Option 4'>Restaurant</option>
+                      <option value='College'>College</option>
+                      <option value='Gas Station'>Gas Station</option>
+                      <option value='Grocery Store'>Grocery Store</option>
+                      <option value='Restaurant'>Restaurant</option>
                       {/* Add more options as needed */}
                   </Form.Control>
                 )}
