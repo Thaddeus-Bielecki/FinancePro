@@ -56,9 +56,9 @@ async function sendMonthlyEmails() {
 
         for (let user of users) {
             // Fetch the incomes, expenses, and loans for the user
-            const incomes = await Income.find({ userId: user._id });
-            const expenses = await Expense.find({ userId: user._id });
-            const loans = await Loan.find({ userId: user._id });
+            const incomes = await Income.find({ user: user._id });
+            const expenses = await Expense.find({ user: user._id });
+            const loans = await Loan.find({ user: user._id });
 
             // Filter the incomes and expenses that have dates within the prior month
             const priorMonthIncomes = incomes.filter(income => income.date >= startOfMonth && income.date <= endOfMonth);
@@ -77,7 +77,7 @@ async function sendMonthlyEmails() {
                 const r = item.interestRate / 12 / 100; // Convert annual interest rate to monthly and from percentage to decimal
                 const PV = item.amount;
                 const n = item.duration;
-                const monthlyPayment = (r * PV) / (1 - Math.pow(1 + r, -n));
+                const monthlyPayment = parseFloat(((r * PV) / (1 - Math.pow(1 + r, -n))).toFixed(2));
                 return monthlyPayment + total;
             }, 0);
             try{
