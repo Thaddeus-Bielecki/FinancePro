@@ -241,7 +241,6 @@ useEffect(() => {
         </Col>
 
         {/* Form to allow the user to enter new expenses */}
-        {userInfo.isMember || expense.length < 1 ? (
           <>
           <div className='text-center'>
           <h1>Bills keep coming? 🧾</h1>
@@ -263,10 +262,10 @@ useEffect(() => {
                   as='select' 
                   value={source} 
                   onChange={(e) => setSource(e.target.value)}>
-                    <option value='Option 1'>College</option>
-                      <option value='Option 2'>Gas Station</option>
-                      <option value='Option 3'>Grocery Store</option>
-                      <option value='Option 4'>Restaurant</option>
+                    <option value='College'>College</option>
+                      <option value='Gas Station'>Gas Station</option>
+                      <option value='Grocery Store'>Grocery Store</option>
+                      <option value='Restaurant'>Restaurant</option>
                       {/* Add more options as needed */}
                 </Form.Control>
               )}
@@ -309,13 +308,13 @@ useEffect(() => {
                     as='select' 
                     value={category} 
                     onChange={(e) => setCategory(e.target.value)}>
-                      <option value='Option 1'>Dinning</option>
-                      <option value='Option 2'>Education</option>
-                      <option value='Option 3'>Entertainment</option>
-                      <option value='Option 4'>Groceries</option>
-                      <option value='Option 5'>Gas</option>
-                      <option value='Option 6'>Rent/Mortgage</option>
-                      <option value='Option 7'>Utilities</option>
+                      <option value='Dinning'>Dinning</option>
+                      <option value='Education'>Education</option>
+                      <option value='Entertainment'>Entertainment</option>
+                      <option value='Groceries'>Groceries</option>
+                      <option value='Gas'>Gas</option>
+                      <option value='Rent/Mortgage'>Rent/Mortgage</option>
+                      <option value='Utilities'>Utilities</option>
                       {/* Add more options as needed */}
                   </Form.Control>
                 )}
@@ -338,9 +337,6 @@ useEffect(() => {
             {loadingAddExpense && <Loader />}
         </Form>
         </>
-        ) : (
-          <h2>Upgrade to a member to add more expenses</h2>
-        )}
         <Col md="2"></Col>
       </Row>
     </>

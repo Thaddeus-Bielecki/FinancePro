@@ -229,9 +229,10 @@ const LoanTracking = () => {
                     as='select' 
                     value={category} 
                     onChange={(e) => setCategory(e.target.value)}>
-                      <option value='Option 1'>Car</option>
-                      <option value='Option 2'>Home</option>
-                      <option value='Option 3'>Student</option>
+                      <option value='Car'>Car</option>
+                      <option value='Home'>Home</option>
+                      <option value='Student'>Student</option>
+                      <option value='Personal'>Personal</option>
                       {/* Add more options as needed */}
                   </Form.Control>
                 )}
@@ -339,9 +340,9 @@ const LoanTracking = () => {
                     as='select' 
                     value={category} 
                     onChange={(e) => setCategory(e.target.value)}>
-                      <option value='Option 1'>Car</option>
-                      <option value='Option 2'>Home</option>
-                      <option value='Option 3'>Student</option>
+                      <option value='Car'>Car</option>
+                      <option value='Home'>Home</option>
+                      <option value='Student'>Student</option>
                       {/* Add more options as needed */}
                   </Form.Control>
                 )}
