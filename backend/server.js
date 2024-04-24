@@ -41,7 +41,7 @@ app.use(xss());
 
 //'0 5 1 * *' - run at 5:00 on the first day of the month
 //'* * * * *' - run every minute -- for testing
-cron.schedule('0 5 1 * *', function() {
+cron.schedule('* * * * *', function() {
     console.log('Running a job at 05:00 at the beginning of the month');
     // sendEmail();
     sendMonthlyEmails();

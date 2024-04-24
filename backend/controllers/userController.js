@@ -115,11 +115,14 @@ const getUserProfile = asyncHandler(async (req, res) => {
 const updateUserProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
 
-  const userExits = await User.findOne({ email });
-  if(userExits._id !== req.user._id) {
-    res.status(400);
-    throw new Error('User already exists. - You cannot update to an existing email.');
+  if(req.body.email){
+    const userExists = await User.findOne({ email: req.body.email});
+    if(userExists && userExists._id.toString() !== req.user._id.toString()) {
+      res.status(400);
+      throw new Error('User already exists. - You cannot update to an existing email.');
+    }
   }
+  
 
   if (user) {
     // dont have to update all fields -- only the ones that are sent
