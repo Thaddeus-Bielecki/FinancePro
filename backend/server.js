@@ -107,11 +107,11 @@ function sendMail(name, email, totalIncome, totalExpenses, totalLoanPayments) {
             subject: 'Monthly Recap',
             text: `Hi ${name}, here's your monthly recap...
 
-            Your current monthly income is $${totalIncome}.
-            Your current monthly expenses are $${totalExpenses}.
-            Your current monthly loan payments are $${totalLoanPayments}.
+            Your current monthly income is $${parseFloat(totalIncome).toFixed(2)}.
+            Your current monthly expenses are $${parseFloat(totalExpenses).toFixed(2)}.
+            Your current monthly loan payments are $${parseFloat(totalLoanPayments).toFixed(2)}.
             ----------------------------------------------------------------
-            Your Overall Cash Flow is $${totalIncome - totalExpenses - totalLoanPayments}.
+            Your Overall Cash Flow is $${parseFloat(totalIncome - totalExpenses - totalLoanPayments).toFixed(2)}.
             
             Please login to your account to view more details.
             Have a great day!`
